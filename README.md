@@ -94,10 +94,3 @@ Future research could improve predictive accuracy by incorporating additional ex
 - Policy intervention timing  
 
 Expanding feature sets and experimenting with hybrid or hierarchical models may further enhance forecasting reliability.
-
----
-
-## Author
-
-Matthew Mitchell  
-M.S. Data Science, UC San Diego  
