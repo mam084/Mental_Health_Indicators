@@ -1,96 +1,40 @@
+# Time-Series Modeling of Mental Health Indicators in the U.S. (2020–2024)
 
-# Time-Series Modeling of Mental Health Indicators in the United States (2020–2024)
+How did reported anxiety and depression change across the United States during and after the COVID-19 pandemic, who was most affected, and can the trend be forecast? This team project analyzes CDC Household Pulse Survey data from 2020 to 2024, clusters states by their symptom trajectories, and compares forecasting approaches.
 
-## Overview
+*Team project by Ethan Porter, A.J. Silberstein, Matthew Epstein, Yousuf Golding, and Matthew Mitchell (June 2024).*
 
-This project analyzes and models national mental health trends in the United States during and following the COVID-19 pandemic. Using CDC Household Pulse Survey data, the study examines reported symptoms of anxiety and depressive disorders from 2020 through 2024. The goal is to quantify shifts in mental health over time, identify demographic disparities, and evaluate predictive modeling approaches for forecasting future trends.
+**[Full report (PDF)](Mental_Health_Indicator_Report.pdf)** · **[Notebook: exploration and state clustering](Mental_Health_Indicator_Notebook.ipynb)**
 
-The project combines exploratory data analysis, demographic comparison, and multiple predictive modeling techniques to better understand how mental health indicators evolved throughout and after the pandemic period.
+## Findings
 
----
+- **Forecasting:** a Prophet model trained on 2020–2022 and tested on 2023 reached an RMSE of about **3.8** percentage points, beating a Bayesian updating model (RMSE about 6.4) by capturing seasonality and trend.
+- **Age:** reported symptom rates fall steadily with age. A linear fit of symptom rate on age group has R² ≈ 0.84, with adults 18–29 reporting the highest rates and adults 60+ the lowest.
+- **Disparities:** transgender respondents and respondents reporting two or more races showed consistently elevated rates.
+- **Over time:** symptom rates peaked during the pandemic and partially declined from 2021 onward.
+- **States:** clustering states by level (k-means), by trajectory shape (dynamic time warping), and by correlation of their monthly series (MDS) groups states with similar pandemic experiences.
 
-## Dataset
+## Data
 
-The data originates from the CDC Household Pulse Survey, conducted in partnership with the U.S. Census Bureau. The survey collected nationwide responses on mental health symptoms across demographic categories including:
+CDC / NCHS [*Indicators of Anxiety or Depression Based on Reported Frequency of Symptoms During Last 7 Days*](https://data.cdc.gov/NCHS/Indicators-of-Anxiety-or-Depression-Based-on-Repor/8pt5-q6wp), collected through the Household Pulse Survey with the U.S. Census Bureau. It reports the share of adults with symptoms of anxiety and/or depressive disorder, nationally and by state, age, sex, gender identity, sexual orientation, race and ethnicity, education, and disability status.
 
-- Age  
-- Gender identity  
-- Race and ethnicity  
-- Education level  
-- Disability status  
-- Geographic region  
+Download the CSV from the link above and save it as `Depression_Symptoms.csv` next to the notebook.
 
-The dataset spans April 2020 through early 2024, providing high-frequency observations suitable for time-series analysis.
+## What's in this repository
 
-Minor missing segments were handled through interpolation when appropriate, while larger missing intervals were excluded to preserve model reliability.
+| File | Contents |
+|---|---|
+| `Mental_Health_Indicator_Report.pdf` | Full report: data, exploratory analysis, Bayesian, Prophet, and regression models, and results |
+| `Mental_Health_Indicator_Notebook.ipynb` | National and demographic trends, plus three approaches to clustering states |
 
----
+## Run the notebook
 
-## Exploratory Data Analysis
+```bash
+pip install pandas numpy matplotlib seaborn scikit-learn scipy tslearn jupyter
+jupyter notebook Mental_Health_Indicator_Notebook.ipynb
+```
 
-Initial analysis focused on identifying structural patterns and demographic variation in reported anxiety and depression symptoms.
+## Limitations and next steps
 
-Key findings include:
-
-- A substantial spike in reported symptoms in early 2020, rising sharply from pre-pandemic baselines.
-- Gradual stabilization and partial decline in mean symptom levels from 2021 onward.
-- Significant variation across states, with some regions exhibiting strong correlation patterns.
-- Clear demographic trends, particularly:
-  - Higher reported symptom levels among younger adults (18–29).
-  - Lower reported symptom levels among older adults (60+).
-  - Elevated rates among transgender respondents and racially mixed individuals.
-
-Visualizations included heatmaps of state correlations, violin plots of age-based distributions, and interactive regional mapping to examine geographic disparities.
-
----
-
-## Predictive Modeling
-
-Three modeling approaches were implemented and compared.
-
-### Bayesian Updating Model
-
-A Bayesian model was first developed to iteratively update posterior means as new data became available. This approach provided uncertainty estimates through confidence intervals but achieved a root mean square error (RMSE) of approximately 6.35, indicating moderate predictive performance.
-
-### Prophet Time-Series Model
-
-To better capture seasonality and trend components, a Prophet model was trained on 2020–2022 data and evaluated on 2023 observations. This model reduced RMSE to approximately 3.82 and demonstrated improved ability to track cyclical patterns and long-term trend movement.
-
-### Linear Regression Model
-
-A least squares regression model examined the relationship between age and reported symptom levels. Results showed a negative association between age and symptom frequency, with an R² of approximately 0.84. However, a relatively high RMSE indicated limitations in predictive precision.
-
----
-
-## Results
-
-The Prophet time-series model provided the strongest forecasting performance among the tested approaches. It successfully captured seasonal variation and broader trend shifts in mental health indicators over time.
-
-The analysis confirms that:
-
-- The pandemic corresponded with a dramatic surge in anxiety and depression symptoms.
-- Mental health impacts were not evenly distributed across demographics.
-- Time-series modeling techniques are effective tools for forecasting population-level mental health trends.
-
----
-
-## Tools and Libraries
-
-- Python  
-- Pandas  
-- Matplotlib  
-- Scikit-learn  
-- Prophet  
-
----
-
-## Future Work
-
-Future research could improve predictive accuracy by incorporating additional explanatory variables such as:
-
-- Economic indicators  
-- Regional unemployment data  
-- Climate and temperature trends  
-- Policy intervention timing  
-
-Expanding feature sets and experimenting with hybrid or hierarchical models may further enhance forecasting reliability.
+- The survey is self-reported and its sampling changed across collection phases, so short-term movements partly reflect methodology.
+- Forecasts use the series alone. Economic indicators, unemployment, and the timing of policy changes could improve them.
